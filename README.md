@@ -6,25 +6,25 @@
 
 ### PHP Library for TZSMM PAY Gateway
 
-The **TZSMM Pay** PHP library allows you to integrate the TZSMM Pay payment gateway into your applications. It provides easy-to-use methods to interact with the TZSMM Pay API for creating and verifying payments, managing payment statuses, and more.
+The **TZSMM Pay** PHP library allows you to integrate the TZSMM Pay payment gateway into your PHP-based applications. It provides easy-to-use methods for creating and verifying payments with the TZSMM Pay API.
 
 ---
 
 ## Features
 
-- **Simple Integration**: Effortlessly integrate TZSMM Pay payment gateway into your PHP-based projects.
-- **Create Payments**: Easily create payments via the API.
+- **Create Payments**: Create payments directly via the TZSMM Pay API.
 - **Verify Payments**: Check payment status in real-time.
-- **Secure**: Built with security best practices in mind.
 - **Supports PHP 7.2 and above**.
+- **Secure and Easy Integration**.
 
 ---
 
 ## Installation
 
-You can install the library via Composer.
+You can install the TZSMM Pay library via Composer.
 
 ### Step 1: Install the Package
+
 Run the following command in your terminal:
 
 ```bash
@@ -32,51 +32,131 @@ composer require tzsmm/tzsmmpay
 ```
 
 ### Step 2: Autoload the Package
-Once installed, Composer will automatically load the library. If you're using a custom autoloader, make sure to include the package via `autoload`.
+
+Once installed, Composer will automatically load the library. If you're using a custom autoloader, ensure that the `Tzsmmpay` class is included properly.
 
 ---
 
-## Usage
+## API Documentation
 
-### Create a Payment
-Use the `createPayment` method to create a new payment via TZSMM Pay:
+This section explains how to use the API to create a payment via the TZSMM Pay gateway.
+
+### API Endpoint: `/api/payment/create`
+
+**URL**: `https://tzsmmpay.com/api/payment/create`
+
+**Method**: `GET`
+
+### Required Parameters
+
+To create a payment, send the following parameters in the API request:
+
+- `api_key`: Your TZSMM Pay API key.
+- `cus_name`: The name of the customer (e.g., "Demo User").
+- `cus_email`: The email of the customer (e.g., "demo@demo.com").
+- `cus_number`: The phone number of the customer (e.g., "01700000000").
+- `amount`: The payment amount (e.g., "1" for 1 unit of currency).
+- `success_url`: The URL to redirect the user to after a successful payment (e.g., `https://domain.com/success-url`).
+- `cancel_url`: The URL to redirect the user to if they cancel the payment (e.g., `https://domain.com/cancel-url/dashboard`).
+- `callback_url`: The URL where payment status will be sent (e.g., `https://domain.com/callback-url`).
+
+### Example Request
 
 ```php
-use Tzsmm\Tzsmmpay;
+use Tzsmmpay\TzsmmpayClient;
+use Tzsmmpay\TzsmmpayResponse;
 
-$tzsmm = new Tzsmmpay([
-    'api_key' => 'YOUR_API_KEY',
-]);
+$apiKey = 'xOevYGbzFmJCm1rkzDrf';  // Your API key
 
-$response = $tzsmm->createPayment([
-    'amount' => 100,  
-    'currency' => 'USD', 
-    'callback_url' => 'https://yourwebsite.com/callback' 
-]);
+$tzsmm = new TzsmmpayClient($apiKey);
 
-echo $response;
+$paymentData = [
+    'cus_name' => 'Demo User',
+    'cus_email' => 'demo@demo.com',
+    'cus_number' => '01700000000',
+    'amount' => 1,
+    'success_url' => 'https://domain.com/success-url',
+    'cancel_url' => 'https://domain.com/cancel-url/dashboard',
+    'callback_url' => 'https://domain.com/callback-url',
+];
+
+$response = $tzsmm->createPayment($paymentData);
+
+if ($response->isSuccess()) {
+    echo "Payment created successfully!";
+    echo "Transaction ID: " . $response->getData()['transaction_id'];
+    echo "Payment URL: " . $response->getData()['payment_url'];
+} else {
+    echo "Error: " . $response->getMessage();
+}
 ```
 
-### Verify a Payment
-Use the `verifyPayment` method to verify the status of a payment:
+### Example Response
 
-```php
-$response = $tzsmm->verifyPayment('payment_id');
-
-echo $response;
+```json
+{
+    "success": true,
+    "data": {
+        "transaction_id": "trx_123456",
+        "payment_url": "https://tzsmmpay.com/payment/trx_123456"
+    },
+    "message": null
+}
 ```
 
 ---
 
-## Configuration
+## Verify Payment
 
-You can configure the library by passing an array of settings when instantiating the `Tzsmmpay` class:
+After a customer has completed their payment, you can verify the payment using the `verifyPayment` method.
+
+### API Endpoint: `/api/payment/verify/{transaction_id}`
+
+**URL**: `https://tzsmmpay.com/api/payment/verify/{transaction_id}`
+
+**Method**: `GET`
+
+### Example Verification Request
 
 ```php
-$tzsmm = new Tzsmmpay([
-    'api_key' => 'YOUR_API_KEY',
-    'api_secret' => 'YOUR_API_SECRET'
-]);
+$transactionId = 'trx_123456';  // Replace with actual transaction ID
+
+$response = $tzsmm->verifyPayment($transactionId);
+
+if ($response->isSuccess()) {
+    echo "Payment verified successfully!";
+    print_r($response->getData());  // Shows payment status and details
+} else {
+    echo "Verification failed: " . $response->getMessage();
+}
+```
+
+### Example Verification Response
+
+```json
+{
+    "success": true,
+    "data": {
+        "status": "Completed",
+        "amount": 1,
+        "cus_name": "Demo User",
+        "cus_email": "demo@demo.com",
+        "cus_number": "01700000000"
+    },
+    "message": null
+}
+```
+
+---
+
+## Error Handling
+
+In case of an error, the API will return an error message in the `message` field of the response. Handle errors accordingly in your application:
+
+```php
+if (!$response->isSuccess()) {
+    echo "Error: " . $response->getMessage();
+}
 ```
 
 ---
@@ -130,15 +210,9 @@ For support or questions, please visit [TZSMM Pay Support](https://tzsmmpay.com/
 **Happy coding!** 🚀
 ```
 
-### Key Sections Explained:
-- **Badges**: These show the license and version of the package.
-- **Features**: Highlights the capabilities of the package.
-- **Installation**: Instructions on how to install and integrate the package using Composer.
-- **Usage**: Provides examples for common use cases like creating and verifying payments.
-- **Configuration**: Instructions for setting up your API credentials.
-- **License**: Information about the licensing of the project (MIT in this case).
-- **Contributing**: Guidance on how others can contribute to the project.
-- **Support**: Details on how to get help and contact support.
-- **Authors**: Details of the author and contributors.
-- **Changelog**: Keeps track of changes in each version.
-- **Acknowledgements**: Credits to services or people who helped or inspired the project.
+### Key Sections in the Documentation:
+
+- **Installation**: Explains how to install the TZSMM Pay PHP library using Composer.
+- **API Documentation**: Details the endpoint to create payments, including the required parameters and example request/response.
+- **Verify Payment**: Guides users on how to verify the status of a payment after a transaction.
+- **Error Handling**: Provides guidance on handling errors returned by the API.
