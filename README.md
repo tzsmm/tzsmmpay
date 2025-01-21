@@ -185,7 +185,7 @@ Contributions are welcome! Please fork the repository, create a branch, and subm
 
 ## Support
 
-For support or questions, please visit [TZSMM Pay Support](https://tzsmmpay.com/support).
+For support or questions, please visit [TZSMM Pay Support](https://tzsmmpay.com).
 
 ---
 
