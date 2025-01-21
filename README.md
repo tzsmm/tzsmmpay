@@ -124,8 +124,11 @@ $transactionId = 'trx_123456';  // Replace with actual transaction ID
 $response = $tzsmm->verifyPayment($transactionId);
 
 if ($response->isSuccess()) {
-    echo "Payment verified successfully!";
-    print_r($response->getData());  // Shows payment status and details
+    if ($response->getData()['status'] == 'Completed') {
+        echo "Payment verified successfully!";
+    } else {
+        echo 'Your Payment is ' . $response->getData()['status'];
+    }
 } else {
     echo "Verification failed: " . $response->getMessage();
 }
