@@ -41,7 +41,7 @@ class TzsmmpayClient
             ]);
         }
 
-        return new TzsmmpayResponse(false, [], $response['message'] ?? 'Unknown error occurred.');
+        return new TzsmmpayResponse(false, [], $response['messages'] ?? 'Unknown error occurred.');
     }
 
     /**
