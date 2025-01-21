@@ -53,11 +53,11 @@ class TzsmmpayClient
      */
     public function verifyPayment(string $transactionId): TzsmmpayResponse
     {
-        $url = "{$this->apiBaseUrl}/payment/verify/{$transactionId}";
+        $url = "{$this->apiBaseUrl}/payment/verify";
+        $data['trx_id'] = $transactionId;
+        $response = $this->makeRequest($url, $data);
 
-        $response = $this->makeRequest($url);
-
-        if (isset($response['status']) && $response['status'] === 'Completed') {
+        if (isset($response['success']) && $response['success'] == true) {
             return new TzsmmpayResponse(true, $response);
         }
 
@@ -80,9 +80,9 @@ class TzsmmpayClient
         } else {
             $postData = ['api_key' => $this->apiKey];
         }
-    
+
         $curl = curl_init();
-    
+
         // Set up the cURL options
         $options = [
             CURLOPT_URL => $url,
@@ -93,21 +93,21 @@ class TzsmmpayClient
                 'Content-Type: application/x-www-form-urlencoded', // Ensure form data format
             ],
         ];
-    
+
         curl_setopt_array($curl, $options);
-    
+
         $response = curl_exec($curl);
-    
+
         if (curl_errno($curl)) {
             $error = curl_error($curl);
             curl_close($curl);
             throw new Exception("cURL Error: $error");
         }
-    
+
         curl_close($curl);
-    
+
         return json_decode($response, true);
     }
-    
+
 
 }
