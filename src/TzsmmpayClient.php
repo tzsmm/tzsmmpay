@@ -74,33 +74,40 @@ class TzsmmpayClient
      */
     private function makeRequest(string $url, array $postData = null): array
     {
+        // Add the API key to the post data
+        if ($postData) {
+            $postData['api_key'] = $this->apiKey;
+        } else {
+            $postData = ['api_key' => $this->apiKey];
+        }
+    
         $curl = curl_init();
-
-        $headers = ['Authorization: Bearer ' . $this->apiKey];
-
+    
+        // Set up the cURL options
         $options = [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_POST => true, // Enable POST request
+            CURLOPT_POSTFIELDS => http_build_query($postData), // Send POST data
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/x-www-form-urlencoded', // Ensure form data format
+            ],
         ];
-
-        if ($postData) {
-            $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = http_build_query($postData);
-        }
-
+    
         curl_setopt_array($curl, $options);
-
+    
         $response = curl_exec($curl);
-
+    
         if (curl_errno($curl)) {
             $error = curl_error($curl);
             curl_close($curl);
             throw new Exception("cURL Error: $error");
         }
-
+    
         curl_close($curl);
-
+    
         return json_decode($response, true);
     }
+    
+
 }
