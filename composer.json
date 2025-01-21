@@ -18,6 +18,6 @@
             "Tzsmmpay\\": "src/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "minimum-stability": "stable",
+  "require": {}
 }
