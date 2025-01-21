@@ -42,18 +42,16 @@ Once installed, Composer will automatically load the library. If you're using a 
 Use the `createPayment` method to create a new payment via TZSMM Pay:
 
 ```php
-use Tzsmmpay\Tzsmmpay;
+use Tzsmm\Tzsmmpay;
 
 $tzsmm = new Tzsmmpay([
-    'api_key' => 'YOUR_API_KEY',  // Replace with your TZSMM Pay API key
-    'api_secret' => 'YOUR_API_SECRET'  // Replace with your API secret
+    'api_key' => 'YOUR_API_KEY',
 ]);
 
 $response = $tzsmm->createPayment([
-    'amount' => 100,  // The payment amount
-    'currency' => 'USD',  // Currency code
-    'payment_method' => 'credit_card',  // Payment method
-    'callback_url' => 'https://yourwebsite.com/callback'  // URL for payment status callback
+    'amount' => 100,  
+    'currency' => 'USD', 
+    'callback_url' => 'https://yourwebsite.com/callback' 
 ]);
 
 echo $response;
