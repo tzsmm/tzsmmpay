@@ -1,0 +1,21 @@
+{
+    "name": "tzsmm/tzsmmpay",
+    "description": "PHP library for TZSMM PAY Gateway",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "TZSMM",
+            "email": "your-email@example.com",
+            "homepage": "https://tzsmmpay.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tzsmmpay\\": "src/"
+        }
+    }
+}
