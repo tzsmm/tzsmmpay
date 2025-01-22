@@ -110,9 +110,9 @@ if ($response->isSuccess()) {
 
 After a customer has completed their payment, you can verify the payment using the `verifyPayment` method.
 
-### API Endpoint: `/api/payment/verify/{transaction_id}`
+### API Endpoint: `/api/payment/verify`
 
-**URL**: `https://tzsmmpay.com/api/payment/verify/{transaction_id}`
+**URL**: `https://tzsmmpay.com/api/payment/verify`
 
 **Method**: `GET`
 
