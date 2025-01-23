@@ -211,11 +211,3 @@ For support or questions, please visit [TZSMM Pay Support](https://tzsmmpay.com)
 ---
 
 **Happy coding!** 🚀
-
-
-### Key Sections in the Documentation:
-
-- **Installation**: Explains how to install the TZSMM Pay PHP library using Composer.
-- **API Documentation**: Details the endpoint to create payments, including the required parameters and example request/response.
-- **Verify Payment**: Guides users on how to verify the status of a payment after a transaction.
-- **Error Handling**: Provides guidance on handling errors returned by the API.
